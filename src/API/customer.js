@@ -14,3 +14,8 @@ export const createCustomer = async (customer) => {
     const {data} = await axios.post("http://localhost:8080/v1/customers", customer)
     return data.data
 }
+
+export const updateCustomerFunc = async (customer) => {
+    const {data} = await axios.put(`http://localhost:8080/v1/customers/${customer.id}`, customer)
+    return data.data
+}
