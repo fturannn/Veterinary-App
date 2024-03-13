@@ -9,10 +9,12 @@ function App() {
   return (
     <>
     <Navbar />
+    <div className='route-container'>
     <Routes>
       <Route path='/customer' element={<Customer />}/>
       <Route path='/animal' element={<Animal />}/>
     </Routes>
+    </div>
     </>
   )
 }
