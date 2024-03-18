@@ -16,7 +16,8 @@ import AdbIcon from '@mui/icons-material/Adb';
 
 const pages = [
     {name: "Müşteriler", path: "/customer"},
-    {name: "Hayvanlar", path: "/animal"}
+    {name: "Hayvanlar", path: "/animal"},
+    {name: "Doktorlar", path: "/doctor"}
 ];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 

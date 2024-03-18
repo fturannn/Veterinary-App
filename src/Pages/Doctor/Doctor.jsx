@@ -1,27 +1,26 @@
 import React, { useState, useEffect } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import UpdateIcon from "@mui/icons-material/Update";
-import "./Customer.css";
 import {
-  getCustomers,
-  deleteCustomer,
-  createCustomer,
-  updateCustomerFunc,
-} from "../../API/customer";
+  getDoctors,
+  deleteDoctor,
+  createDoctor,
+  updateDoctorFunc,
+} from "../../API/doctor";
 
-function Customer() {
-  const [customer, setCustomer] = useState([]);
+function Doctor() {
+  const [doctor, setDoctor] = useState([]);
   const [reload, setReload] = useState(true);
   const [searchResults, setSearchResults] = useState([]);
   const [search, setSearch] = useState("");
-  const [newCustomer, setNewCustomer] = useState({
+  const [newDoctor, setNewDoctor] = useState({
     name: "",
     phone: "",
     mail: "",
     address: "",
     city: "",
   });
-  const [updateCustomer, setUpdateCustomer] = useState({
+  const [updateDoctor, setUpdateDoctor] = useState({
     name: "",
     phone: "",
     mail: "",
@@ -30,33 +29,33 @@ function Customer() {
   });
 
   useEffect(() => {
-    getCustomers().then((data) => {
-      setCustomer(data);
+    getDoctors().then((data) => {
+      setDoctor(data);
       setSearchResults(data);
     });
     setReload(false);
   }, [reload]);
 
-  //--Delete Customer--
+  //--Delete Doctor--
   const handleDelete = (id) => {
-    deleteCustomer(id).then(() => {
+    deleteDoctor(id).then(() => {
       setReload(true);
     });
   };
 
-  //--New Customer
-  const handleNewCustomer = (event) => {
-    setNewCustomer({
-      ...newCustomer,
+  //--New Doctor
+  const handleNewDoctor = (event) => {
+    setNewDoctor({
+      ...newDoctor,
       [event.target.name]: event.target.value,
     });
   };
 
   const handleCreate = () => {
-    createCustomer(newCustomer).then(() => {
+    createDoctor(newDoctor).then(() => {
       setReload(true);
     });
-    setNewCustomer({
+    setNewDoctor({
       name: "",
       phone: "",
       mail: "",
@@ -65,23 +64,23 @@ function Customer() {
     });
   };
 
-  //--Update Customer
-  const handleUpdateBtn = (customer) => {
-    setUpdateCustomer(customer);
+  //--Update Doctor
+  const handleUpdateBtn = (doctor) => {
+    setUpdateDoctor(doctor);
   };
 
   const handleUpdateChange = (event) => {
-    setUpdateCustomer({
-      ...updateCustomer,
+    setUpdateDoctor({
+      ...updateDoctor,
       [event.target.name]: event.target.value,
     });
   };
 
   const handleUpdate = () => {
-    updateCustomerFunc(updateCustomer).then(() => {
+    updateDoctorFunc(updateDoctor).then(() => {
       setReload(true);
     });
-    setUpdateCustomer({
+    setUpdateDoctor({
       name: "",
       phone: "",
       mail: "",
@@ -90,21 +89,21 @@ function Customer() {
     });
   };
 
-  //--Search Customer
+  //--Search Doctor
   const handleSearch = () => {
-    const filteredCustomer = searchResults.filter((customer) =>
-      customer.name.toLowerCase().includes(search.toLowerCase())
+    const filteredDoctor = searchResults.filter((doctor) =>
+      doctor.name.toLowerCase().includes(search.toLowerCase())
     );
-    setCustomer(filteredCustomer);
+    setDoctor(filteredDoctor);
   };
 
   return (
     <>
-      <h1>Müşteri Yönetim Ekranı</h1>
+      <h1>Doktor Yönetim Ekranı</h1>
       <div className="general-container">
         <div className="list-container">
           <div className="list">
-            <h3>Müşteri Listesi</h3>
+            <h3>Doktor Listesi</h3>
 
             <div className="table-container">
               <table className="table">
@@ -119,18 +118,18 @@ function Customer() {
                   </tr>
                 </thead>
                 <tbody>
-                  {customer.map((customer) => (
-                    <tr key={customer.id}>
-                      <td>{customer.name}</td>
-                      <td>{customer.mail}</td>
-                      <td>{customer.address}</td>
-                      <td>{customer.city}</td>
-                      <td>{customer.phone}</td>
+                  {doctor.map((doctor) => (
+                    <tr key={doctor.id}>
+                      <td>{doctor.name}</td>
+                      <td>{doctor.mail}</td>
+                      <td>{doctor.address}</td>
+                      <td>{doctor.city}</td>
+                      <td>{doctor.phone}</td>
                       <td>
-                        <span onClick={() => handleUpdateBtn(customer)}>
+                        <span onClick={() => handleUpdateBtn(doctor)}>
                           <UpdateIcon />
                         </span>
-                        <span onClick={() => handleDelete(customer.id)}>
+                        <span onClick={() => handleDelete(doctor.id)}>
                           <DeleteIcon />
                         </span>{" "}
                       </td>
@@ -143,87 +142,87 @@ function Customer() {
         </div>
         <div className="operation-container">
           <h3>Operasyonlar</h3>
-          <div className="customer-newCustomer">
-            <h2>Yeni Müşteri</h2>
+          <div className="doctor-newDoctor">
+            <h2>Yeni Doktor</h2>
             <input
               type="text"
               placeholder="Name"
               name="name"
-              value={newCustomer.name}
-              onChange={handleNewCustomer}
+              value={newDoctor.name}
+              onChange={handleNewDoctor}
             />
             <input
               type="text"
               placeholder="Phone"
               name="phone"
-              value={newCustomer.phone}
-              onChange={handleNewCustomer}
+              value={newDoctor.phone}
+              onChange={handleNewDoctor}
             />
             <input
               type="text"
               placeholder="Mail"
               name="mail"
-              value={newCustomer.mail}
-              onChange={handleNewCustomer}
+              value={newDoctor.mail}
+              onChange={handleNewDoctor}
             />
             <input
               type="text"
               placeholder="Address"
               name="address"
-              value={newCustomer.address}
-              onChange={handleNewCustomer}
+              value={newDoctor.address}
+              onChange={handleNewDoctor}
             />
             <input
               type="text"
               placeholder="City"
               name="city"
-              value={newCustomer.city}
-              onChange={handleNewCustomer}
+              value={newDoctor.city}
+              onChange={handleNewDoctor}
             />
             <button onClick={handleCreate} className="button-submit">Create</button>
           </div>
-          <div className="customer-updateCustomer">
-            <h2>Müşteri güncelle</h2>
+          <div className="doctor-updateDoctor">
+            <h2>Doktor güncelle</h2>
             <input
               type="text"
               placeholder="Name"
               name="name"
               onChange={handleUpdateChange}
-              value={updateCustomer.name}
+              value={updateDoctor.name}
             />
             <input
               type="text"
               placeholder="Phone"
               name="phone"
               onChange={handleUpdateChange}
-              value={updateCustomer.phone}
+              value={updateDoctor.phone}
             />
             <input
               type="text"
               placeholder="Mail"
               name="mail"
               onChange={handleUpdateChange}
-              value={updateCustomer.mail}
+              value={updateDoctor.mail}
             />
             <input
               type="text"
               placeholder="Address"
               name="address"
               onChange={handleUpdateChange}
-              value={updateCustomer.address}
+              value={updateDoctor.address}
             />
             <input
               type="text"
               placeholder="City"
               name="city"
               onChange={handleUpdateChange}
-              value={updateCustomer.city}
+              value={updateDoctor.city}
             />
             <button onClick={handleUpdate} className="button-submit">Update</button>
           </div>
 
           <div className="search-bar">
-            <h2>Müşteri Ara</h2>
+            <h2>Doktor Ara</h2>
             <input
               type="text"
               placeholder="isim giriniz... "
@@ -238,4 +237,4 @@ function Customer() {
   );
 }
 
-export default Customer;
+export default Doctor
