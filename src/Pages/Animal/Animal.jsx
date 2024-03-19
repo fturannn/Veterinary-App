@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import UpdateIcon from "@mui/icons-material/Update";
+import Alert from "@mui/material/Alert";
 import {
   getAnimals,
   deleteAnimal,
@@ -84,7 +85,7 @@ function Animal() {
           gender: "",
           colour: "",
           dateOfBirth: "",
-          customerId: "",
+          customer: "",
         });
       })
       .catch((error) => {
@@ -127,7 +128,7 @@ function Animal() {
           gender: "",
           colour: "",
           dateOfBirth: "",
-          customerId: "",
+          customer: "",
         });
       })
       .catch((error) => {
@@ -267,6 +268,11 @@ function Animal() {
             <button onClick={handleCreate} className="button-submit">
               Create
             </button>
+            {alert === 1 ? (
+              <Alert severity="error">
+                Bu hayvan daha önce sisteme eklenmiş!
+              </Alert>
+            ) : null}
           </div>
           <div className="animal-updateAnimal">
             <h2>Hayvan güncelle</h2>
@@ -327,6 +333,11 @@ function Animal() {
             <button onClick={handleUpdate} className="button-submit">
               Update
             </button>
+            {alert === 2 ? (
+              <Alert severity="error">
+                Lütfen güncellemek istediğiniz hayvanı seçin!
+              </Alert>
+            ) : null}
           </div>
 
           <div className="search-bar-animal">

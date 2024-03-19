@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import UpdateIcon from "@mui/icons-material/Update";
-import "./Report.css";
+import Alert from "@mui/material/Alert";
 import {
   getReports,
   deleteReport,
@@ -16,17 +16,18 @@ function Report() {
   const [searchResults, setSearchResults] = useState([]);
   const [appointments, setAppointments] = useState([]);
   const [search, setSearch] = useState("");
+  const [alert, setAlert] = useState(0);
   const [newReport, setNewReport] = useState({
     title: "",
     diagnosis: "",
     price: "",
-    appointment: ""
+    appointment: "",
   });
   const [updateReport, setUpdateReport] = useState({
     title: "",
     diagnosis: "",
     price: "",
-    appointment: ""
+    appointment: "",
   });
 
   useEffect(() => {
@@ -65,17 +66,24 @@ function Report() {
   };
 
   const handleCreate = () => {
-    createReport(newReport).then(() => {
-      setReload(true);
-    });
-    setNewReport({
-      title: "",
-    diagnosis: "",
-    price: "",
-    appointment: {
-      id:"",
-    }
-    });
+    createReport(newReport)
+      .then(() => {
+        setReload(true);
+        setNewReport({
+          title: "",
+          diagnosis: "",
+          price: "",
+          appointment: {
+            id: "",
+          },
+        });
+      })
+      .catch((error) => {
+        setAlert(1);
+        setTimeout(() => {
+          setAlert(0);
+        }, 3000);
+      });
   };
 
   //--Update Report
@@ -100,17 +108,24 @@ function Report() {
   };
 
   const handleUpdate = () => {
-    updateReportFunc(updateReport).then(() => {
-      setReload(true);
-    });
-    setUpdateReport({
-      title: "",
-        diagnosis: "",
-        price: "",
-        appointment: {
-          id:"",
-        },
-    });
+    updateReportFunc(updateReport)
+      .then(() => {
+        setReload(true);
+        setUpdateReport({
+          title: "",
+          diagnosis: "",
+          price: "",
+          appointment: {
+            id: "",
+          },
+        });
+      })
+      .catch((error) => {
+        setAlert(2);
+        setTimeout(() => {
+          setAlert(0);
+        }, 3000);
+      });
   };
 
   //--Search Report
@@ -222,6 +237,11 @@ function Report() {
             <button onClick={handleCreate} className="button-submit">
               Create
             </button>
+            {alert === 1 ? (
+              <Alert severity="error">
+                Bu randevuya ait rapor sistemde zaten kayıtlı!
+              </Alert>
+            ) : null}
           </div>
           <div className="report-updateReport">
             <h2>Rapor güncelle</h2>
@@ -261,6 +281,9 @@ function Report() {
             <button onClick={handleUpdate} className="button-submit">
               Update
             </button>
+            {alert === 2 ? (
+              <Alert severity="error">Bu rapor sistemde zaten kayıtlı!</Alert>
+            ) : null}
           </div>
 
           <div className="search-bar">

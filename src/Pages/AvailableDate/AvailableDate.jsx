@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import UpdateIcon from "@mui/icons-material/Update";
+import Alert from "@mui/material/Alert";
 import {
   getAvailableDates,
   deleteAvailableDate,
@@ -15,6 +16,7 @@ function AvailableDate() {
   const [searchResults, setSearchResults] = useState([]);
   const [doctors, setDoctors] = useState([]);
   const [search, setSearch] = useState("");
+  const [alert, setAlert] = useState(0);
   const [newAvailableDate, setNewAvailableDate] = useState({
     availableDate: "",
     doctor: "",
@@ -61,15 +63,22 @@ function AvailableDate() {
   };
 
   const handleCreate = () => {
-    createAvailableDate(newAvailableDate).then(() => {
-      setReload(true);
-    });
-    setNewAvailableDate({
-        availableDate: "",
-        doctor: {
-            id: ""
+    createAvailableDate(newAvailableDate)
+      .then(() => {
+        setReload(true);
+        setNewAvailableDate({
+          availableDate: "",
+          doctor: {
+            id: "",
           },
-    });
+        });
+      })
+      .catch((error) => {
+        setAlert(1);
+        setTimeout(() => {
+          setAlert(0);
+        }, 3000);
+      });
   };
 
   //--Update Available Date
@@ -85,13 +94,20 @@ function AvailableDate() {
   };
 
   const handleUpdate = () => {
-    updateAvailableDateFunc(updateAvailableDate).then(() => {
-      setReload(true);
-    });
-    setUpdateAvailableDate({
-      availableDate: "",
-      doctor: "",
-    });
+    updateAvailableDateFunc(updateAvailableDate)
+      .then(() => {
+        setReload(true);
+        setUpdateAvailableDate({
+          availableDate: "",
+          doctor: "",
+        });
+      })
+      .catch((error) => {
+        setAlert(2);
+        setTimeout(() => {
+          setAlert(0);
+        }, 3000);
+      });
   };
 
   //--Search Available Date
@@ -193,6 +209,9 @@ function AvailableDate() {
             <button onClick={handleCreate} className="button-submit">
               Create
             </button>
+            {alert === 1 ? (
+              <Alert severity="error">Bu tarih müsait değil!</Alert>
+            ) : null}
           </div>
           <div className="availableDate-updateAvailableDate">
             <h2>Doktor Müsaitlik güncelle</h2>
@@ -222,6 +241,11 @@ function AvailableDate() {
             <button onClick={handleUpdate} className="button-submit">
               Update
             </button>
+            {alert === 2 ? (
+              <Alert severity="error">
+                Lütfen güncellemek istediğiniz tarihi seçin!
+              </Alert>
+            ) : null}
           </div>
 
           <div className="search-bar">

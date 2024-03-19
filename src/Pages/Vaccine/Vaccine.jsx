@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import UpdateIcon from "@mui/icons-material/Update";
+import Alert from "@mui/material/Alert";
 import {
   getVaccines,
   deleteVaccine,
   createVaccine,
   updateVaccineFunc,
-  getUpcomingVaccines
+  getUpcomingVaccines,
 } from "../../API/vaccine";
 import { getAnimals } from "../../API/animal";
 
@@ -19,6 +20,7 @@ function Vaccine() {
   const [reload, setReload] = useState(true);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [alert, setAlert] = useState(0);
   const [newVaccine, setNewVaccine] = useState({
     name: "",
     code: "",
@@ -70,19 +72,26 @@ function Vaccine() {
   };
 
   const handleCreate = () => {
-    createVaccine(newVaccine).then(() => {
-      console.log(newVaccine);
-      setReload(true);
-      setNewVaccine({
-        name: "",
-        code: "",
-        protectionStartDate: "",
-        protectionFinishDate: "",
-        animal: {
-          id: "",
-        },
+    createVaccine(newVaccine)
+      .then(() => {
+        console.log(newVaccine);
+        setReload(true);
+        setNewVaccine({
+          name: "",
+          code: "",
+          protectionStartDate: "",
+          protectionFinishDate: "",
+          animal: {
+            id: "",
+          },
+        });
+      })
+      .catch((error) => {
+        setAlert(1);
+        setTimeout(() => {
+          setAlert(0);
+        }, 3000);
       });
-    });
   };
 
   //--Update Vaccine
@@ -107,18 +116,25 @@ function Vaccine() {
   };
 
   const handleUpdate = () => {
-    updateVaccineFunc(updateVaccine).then(() => {
-      setReload(true);
-    });
-    setUpdateVaccine({
-      name: "",
-      code: "",
-      protectionStartDate: "",
-      protectionFinishDate: "",
-      animal: {
-        id: "",
-      },
-    });
+    updateVaccineFunc(updateVaccine)
+      .then(() => {
+        setReload(true);
+        setUpdateVaccine({
+          name: "",
+          code: "",
+          protectionStartDate: "",
+          protectionFinishDate: "",
+          animal: {
+            id: "",
+          },
+        });
+      })
+      .catch((error) => {
+        setAlert(2);
+        setTimeout(() => {
+          setAlert(0); // ayni isim ve code ise guncellemez, alert!
+        }, 3000);
+      });
   };
 
   //--Search Vaccine
@@ -236,12 +252,21 @@ function Vaccine() {
                 Select Animal
               </option>
               {animals.map((animal) => {
-                return <option value={animal.id} key={animal.id}>{animal.name}</option>;
+                return (
+                  <option value={animal.id} key={animal.id}>
+                    {animal.name}
+                  </option>
+                );
               })}
             </select>
             <button onClick={handleCreate} className="button-submit">
               Create
             </button>
+            {alert === 1 ? (
+              <Alert severity="error">
+                Aşı koruyuculuğu hala aktif, yeni bir aşı ekleyemezsiniz!
+              </Alert>
+            ) : null}
           </div>
           <div className="vaccine-updateVaccine">
             <h2>Aşı güncelle</h2>
@@ -283,12 +308,21 @@ function Vaccine() {
                 Select Animal
               </option>
               {animals.map((animal) => {
-                return <option value={animal.id} key={animal.id}>{animal.name}</option>;
+                return (
+                  <option value={animal.id} key={animal.id}>
+                    {animal.name}
+                  </option>
+                );
               })}
             </select>
             <button onClick={handleUpdate} className="button-submit">
               Update
             </button>
+            {alert === 2 ? (
+              <Alert severity="error">
+                Aynı isimde ve kodda aşı sistemde mevcut!
+              </Alert>
+            ) : null}
           </div>
 
           <div className="search-bar">
@@ -329,7 +363,9 @@ function Vaccine() {
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
             />
-            <button onClick={handleSearchByDates} className="button-submit">Search</button>
+            <button onClick={handleSearchByDates} className="button-submit">
+              Search
+            </button>
             <button className="button-submit" onClick={handleReset}>
               Show All
             </button>

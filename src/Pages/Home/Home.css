@@ -4,7 +4,6 @@
     justify-content: center;
     align-items: center;
     height: calc(100vh - 70px);
-    /* background-image: linear-gradient(to right top, #174c9a, #007fca, #00acbf, #00d27f, #a8eb12); */
     overflow: hidden;
     
   }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import UpdateIcon from "@mui/icons-material/Update";
-import "./Appointment.css";
+import Alert from "@mui/material/Alert";
 import {
   getAppointments,
   deleteAppointment,
@@ -24,6 +24,7 @@ function Appointment() {
   const [endDate, setEndDate] = useState("");
   const [doctorId, setDoctorId] = useState("");
   const [animalId, setAnimalId] = useState("");
+  const [alert, setAlert] = useState(0);
   const [newAppointment, setNewAppointment] = useState({
     appointmentDate: "",
     doctor: "",
@@ -38,7 +39,7 @@ function Appointment() {
 
   useEffect(() => {
     getAppointments().then((data) => {
-      console.log(data)
+      console.log(data);
       setAppointments(data);
       setSearchResults(data);
     });
@@ -83,18 +84,25 @@ function Appointment() {
   };
 
   const handleCreate = () => {
-    createAppointment(newAppointment).then(() => {
-      setReload(true);
-      setNewAppointment({
-        appointmentDate: "",
-        doctor: {
-          id: "",
-        },
-        animal: {
-          id: "",
-        },
+    createAppointment(newAppointment)
+      .then(() => {
+        setReload(true);
+        setNewAppointment({
+          appointmentDate: "",
+          doctor: {
+            id: "",
+          },
+          animal: {
+            id: "",
+          },
+        });
+      })
+      .catch((error) => {
+        setAlert(1);
+        setTimeout(() => {
+          setAlert(0);
+        }, 3000);
       });
-    });
   };
 
   //--Update Appointment
@@ -126,14 +134,21 @@ function Appointment() {
   };
 
   const handleUpdate = () => {
-    updateAppointmentFunc(updateAppointment).then(() => {
-      setReload(true);
-      setUpdateAppointment({
-        appointmentDate: "",
-        doctor: "",
-        animal: "",
+    updateAppointmentFunc(updateAppointment)
+      .then(() => {
+        setReload(true);
+        setUpdateAppointment({
+          appointmentDate: "",
+          doctor: "",
+          animal: "",
+        });
+      })
+      .catch((error) => {
+        setAlert(2);
+        setTimeout(() => {
+          setAlert(0);
+        }, 3000);
       });
-    });
   };
   //--Search Customer
 
@@ -147,9 +162,11 @@ function Appointment() {
   };
 
   const handleDoctorDateSearchBtn = () => {
-    getAppointmentByDoctorAndDateRange(doctorId, startDate, endDate).then((data) => {
-      setAppointments(data);
-    });
+    getAppointmentByDoctorAndDateRange(doctorId, startDate, endDate).then(
+      (data) => {
+        setAppointments(data);
+      }
+    );
   };
 
   const handleSearchAnimalChange = (event) => {
@@ -162,9 +179,11 @@ function Appointment() {
   };
 
   const handleAnimalDateSearchBtn = () => {
-    getAppointmentByAnimalAndDateRange(animalId, startDate, endDate).then((data) => {
-      setAppointments(data);
-    });
+    getAppointmentByAnimalAndDateRange(animalId, startDate, endDate).then(
+      (data) => {
+        setAppointments(data);
+      }
+    );
   };
 
   const handleReset = () => {
@@ -259,6 +278,11 @@ function Appointment() {
             <button onClick={handleCreate} className="button-submit">
               Create
             </button>
+            {alert === 1 ? (
+              <Alert severity="error">
+                Doktor bu tarihte müsait değil. Lütfen başka bir tarih seçin!
+              </Alert>
+            ) : null}
           </div>
           <div className="appointment-updateAppointment">
             <h2>Randevu güncelle</h2>
@@ -297,6 +321,9 @@ function Appointment() {
             <button onClick={handleUpdate} className="button-submit">
               Update
             </button>
+            {alert === 2 ? (
+              <Alert severity="error">Bu tarihte bir randevu mevcut!</Alert>
+            ) : null}
           </div>
 
           <div className="search-bar">
@@ -364,7 +391,12 @@ function Appointment() {
               onChange={(e) => setEndDate(e.target.value)}
             />
 
-            <button onClick={handleAnimalDateSearchBtn} className="button-submit">Search</button>
+            <button
+              onClick={handleAnimalDateSearchBtn}
+              className="button-submit"
+            >
+              Search
+            </button>
           </div>
 
           <button className="button-submit" onClick={handleReset}>
