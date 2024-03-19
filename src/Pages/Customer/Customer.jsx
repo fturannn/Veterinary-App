@@ -116,6 +116,11 @@ function Customer() {
     setSearch("");
   };
 
+  const handleReset = () => {
+    setSearch("");
+    setCustomer(searchResults);
+  };
+
   return (
     <>
       <h1>Müşteri Yönetim Ekranı</h1>
@@ -265,6 +270,9 @@ function Customer() {
             <button onClick={handleSearch} className="button-submit">
               Search
             </button>
+            <button className="button-submit" onClick={handleReset}>
+          Show All
+        </button>
           </div>
         </div>
       </div>
