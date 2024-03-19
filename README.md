@@ -79,3 +79,11 @@ The project encompasses the following endpoints:
 | POST        | /v1/appointments          | Adds a new appointment                                          |
 | PUT         | /v1/appointments/{id}     | Updates information for an appointment by ID                    |
 | DELETE      | /v1/appointments/{id}     | Deletes a specific appointment by ID                            |
+
+| HTTP Method | Endpoint              | Description                         |
+|-------------|-----------------------|-------------------------------------|
+| GET         | /v1/reports           | Lists all reports                   |  
+| GET         | /v1/reports/{id}      | Lists an reports with a specific ID |
+| POST        | /v1/reports           | Creates report                      |
+| PUT         | /v1/reports/{id}      | Updates report with a specific ID   |
+| DELETE      | /v1/reports/{id} | Deletes report with a specific ID   |
