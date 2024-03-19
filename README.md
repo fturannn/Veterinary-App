@@ -1,4 +1,4 @@
-![./src/assets/layout.png](layout.png)
+![layout](./src/assets/layout.png)
 
 A veterinary management system project has been developed with an API that allows a veterinary clinic to manage its own operations.
 
