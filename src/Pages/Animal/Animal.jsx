@@ -12,7 +12,7 @@ import {
 import { getCustomers } from "../../API/customer";
 
 function Animal() {
-  const [animal, setAnimal] = useState([]);
+  const [animals, setAnimals] = useState([]);
   const [reload, setReload] = useState(true);
   const [searchResults, setSearchResults] = useState([]);
   const [search, setSearch] = useState("");
@@ -40,7 +40,7 @@ function Animal() {
 
   useEffect(() => {
     getAnimals().then((data) => {
-      setAnimal(data);
+      setAnimals(data);
       setSearchResults(data);
     });
     getCustomers().then((data) => {
@@ -141,14 +141,14 @@ function Animal() {
   //--Search Animal
   const handleSearchAnimal = () => {
     getAnimalByName(search).then((data) => {
-      setAnimal(data);
+      setAnimals(data);
     });
   };
 
   //--Search Animal By Customer Name
   const handleSearchAnimalByCustomerName = () => {
     getAnimalByCustomerName(customerSearch).then((data) => {
-      setAnimal(data);
+      setAnimals(data);
     });
   };
 
@@ -156,7 +156,7 @@ function Animal() {
   const handleReset = () => {
     setSearch("");
     setCustomerSearch("");
-    setAnimal(searchResults);
+    setAnimals(searchResults);
   };
 
   return (
@@ -182,7 +182,7 @@ function Animal() {
                   </tr>
                 </thead>
                 <tbody>
-                  {animal.map((animal) => (
+                  {animals.map((animal) => (
                     <tr key={animal.id}>
                       <td>{animal.name}</td>
                       <td>{animal.species}</td>
@@ -257,7 +257,11 @@ function Animal() {
                 Select customer
               </option>
               {customers.map((customer) => {
-                return <option value={customer.id} key={customer.id}>{customer.name}</option>;
+                return (
+                  <option value={customer.id} key={customer.id}>
+                    {customer.name}
+                  </option>
+                );
               })}
             </select>
             <button onClick={handleCreate} className="button-submit">

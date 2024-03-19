@@ -7,6 +7,8 @@ import {
   createDoctor,
   updateDoctorFunc,
 } from "../../API/doctor";
+import { Outlet } from "react-router-dom";
+import "./Doctor.css"
 
 function Doctor() {
   const [doctor, setDoctor] = useState([]);
@@ -97,10 +99,16 @@ function Doctor() {
     setDoctor(filteredDoctor);
   };
 
+  const handleReset = () => {
+    setSearch("");
+    setDoctor(searchResults);
+  };
+
   return (
     <>
       <h1>Doktor Yönetim Ekranı</h1>
-      <div className="general-container">
+      <div className="general-container-doctors">
+        <div className="doctors">
         <div className="list-container">
           <div className="list">
             <h3>Doktor Listesi</h3>
@@ -230,8 +238,13 @@ function Doctor() {
               onChange={(e) => setSearch(e.target.value)}
             />
             <button onClick={handleSearch} className="button-submit">Search</button>
+            <button className="button-submit" onClick={handleReset}>
+            Show All
+          </button>
           </div>
         </div>
+        </div>
+        <Outlet />
       </div>
     </>
   );

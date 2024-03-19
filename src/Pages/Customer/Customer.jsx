@@ -8,12 +8,14 @@ import {
   createCustomer,
   updateCustomerFunc,
 } from "../../API/customer";
+import Alert from "@mui/material/Alert";
 
 function Customer() {
   const [customer, setCustomer] = useState([]);
   const [reload, setReload] = useState(true);
   const [searchResults, setSearchResults] = useState([]);
   const [search, setSearch] = useState("");
+  const [alert, setAlert] = useState(0);
   const [newCustomer, setNewCustomer] = useState({
     name: "",
     phone: "",
@@ -53,16 +55,24 @@ function Customer() {
   };
 
   const handleCreate = () => {
-    createCustomer(newCustomer).then(() => {
-      setReload(true);
-    });
-    setNewCustomer({
-      name: "",
-      phone: "",
-      mail: "",
-      address: "",
-      city: "",
-    });
+    console.log(newCustomer);
+    createCustomer(newCustomer)
+      .then(() => {
+        setReload(true);
+        setNewCustomer({
+          name: "",
+          phone: "",
+          mail: "",
+          address: "",
+          city: "",
+        });
+      })
+      .catch((error) => {
+        setAlert(1);
+        setTimeout(() => {
+          setAlert(0);
+        }, 3000);
+      });
   };
 
   //--Update Customer
@@ -78,16 +88,23 @@ function Customer() {
   };
 
   const handleUpdate = () => {
-    updateCustomerFunc(updateCustomer).then(() => {
-      setReload(true);
-    });
-    setUpdateCustomer({
-      name: "",
-      phone: "",
-      mail: "",
-      address: "",
-      city: "",
-    });
+    updateCustomerFunc(updateCustomer)
+      .then(() => {
+        setReload(true);
+        setUpdateCustomer({
+          name: "",
+          phone: "",
+          mail: "",
+          address: "",
+          city: "",
+        });
+      })
+      .catch((error) => {
+        setAlert(2);
+        setTimeout(() => {
+          setAlert(0);
+        }, 3000);
+      });
   };
 
   //--Search Customer
@@ -96,6 +113,7 @@ function Customer() {
       customer.name.toLowerCase().includes(search.toLowerCase())
     );
     setCustomer(filteredCustomer);
+    setSearch("");
   };
 
   return (
@@ -180,7 +198,14 @@ function Customer() {
               value={newCustomer.city}
               onChange={handleNewCustomer}
             />
-            <button onClick={handleCreate} className="button-submit">Create</button>
+            <button onClick={handleCreate} className="button-submit">
+              Create
+            </button>
+            {alert === 1 ? (
+              <Alert severity="error">
+                Bu kullanıcı daha önce sisteme eklenmiş!
+              </Alert>
+            ) : null}
           </div>
           <div className="customer-updateCustomer">
             <h2>Müşteri güncelle</h2>
@@ -219,7 +244,14 @@ function Customer() {
               onChange={handleUpdateChange}
               value={updateCustomer.city}
             />
-            <button onClick={handleUpdate} className="button-submit">Update</button>
+            <button onClick={handleUpdate} className="button-submit">
+              Update
+            </button>
+            {alert === 2 ? (
+              <Alert severity="error">
+                Lütfen güncellemek istediğiniz kullanıcıyı seçin!
+              </Alert>
+            ) : null}
           </div>
 
           <div className="search-bar">
@@ -230,7 +262,9 @@ function Customer() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
-            <button onClick={handleSearch} className="button-submit">Search</button>
+            <button onClick={handleSearch} className="button-submit">
+              Search
+            </button>
           </div>
         </div>
       </div>

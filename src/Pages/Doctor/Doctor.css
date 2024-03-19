@@ -1,0 +1,11 @@
+.general-container-doctors {
+    display: flex;
+    gap: 25px;
+    flex-direction: column;
+    margin-bottom: 54px;
+}
+
+.doctors {
+    display: flex;
+    gap: 25px;
+}
