@@ -1,5 +1,8 @@
 ![layout](./src/assets/layout.png)
 
+
+You can access the live version of the project from the link provided here -> https://veterinary-app-ochre.vercel.app/
+
 A veterinary management system project has been developed with an API that allows a veterinary clinic to manage its own operations.
 
 The application is intended to be used by veterinary staff. With this application, staff members can register veterinary doctors, record their working days (available days), and make date entries without specifying the time.
